@@ -35,7 +35,10 @@ CREATE TABLE order_items (
     price_at_purchase FLOAT,
     CONSTRAINT fk_order
         FOREIGN KEY(order_id)
-            REFERENCES orders(id)
+            REFERENCES orders(id),
+    CONSTRAINT fk_product
+        FOREIGN KEY (product_id)
+            REFERENCES products(id)
 );
 
 CREATE TABLE customers (
