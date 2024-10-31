@@ -127,11 +127,11 @@ def generate_products(n):
     i = 0
     while i < n:
 
-        product = fake.random_company_product()
-        adjective = fake.random_good_service_adjective()
+        product = random.choice(["Television","Refrigerator","Washing Machine","Microwave Oven","Air Conditioner","Laptop","Smartphone","Tablet","Smartwatch","Headphones","Speaker","Router","Modem","Printer","Scanner","Projector","Camera","Drones","Gaming Console","Vacuum Cleaner"])
+        adjective = random.choice(["Sleek", "Portable", "Powerful", "Innovative", "Durable", "High-tech", "User-friendly", "Energy-efficient", "Multifunctional", "Compact"])
         data['name'].append(adjective+product)
         data['category'].append(product)
-        data['price'].append(random.uniform(1, 1.99)*fake.random_number(1000))
+        data['price'].append(round(random.uniform(10, 1000), 2))
         data['supplier_id'].append(fake.random_number(100))
         data['stock_quantity'].append(fake.random_number(200))
         #add_product(data['name'][i], data['category'][i], data['price'][i], data['supplier_id'][i], data['stock_quantity'][i])
@@ -234,7 +234,7 @@ def generate_shipments(orders):
         if orders['order_status'][i] == "Shipped":
             shipment_data['order_id'].append(i+1)
             shipped_date = fake.date_between_dates(date_start=orders['order_date'][i])
-            delivery_date = shipped_date + datetime.timedelta(days=random.)andint(3, 15))
+            delivery_date = shipped_date + datetime.timedelta(days=random.randint(3, 15))
             shipping_cost = random.randint(9, 49)
 
             if delivery_date > today: # tietokannassa delivery_date on aina päivämäärä, eli tästä tulee ongelmia.
