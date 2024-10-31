@@ -1,9 +1,11 @@
 from faker import Faker
+from faker.providers import company
 import datetime
 import random
 import psycopg2
 
 fake = Faker()
+fake.add_provider(company)
 
 def add_product(data):
     con = connect()
@@ -132,8 +134,8 @@ def generate_products(n):
         data['name'].append(adjective+product)
         data['category'].append(product)
         data['price'].append(round(random.uniform(10, 1000), 2))
-        data['supplier_id'].append(fake.random_number(100))
-        data['stock_quantity'].append(fake.random_number(200))
+        data['supplier_id'].append(random.randint(1,100))
+        data['stock_quantity'].append(random.randint(1,200))
         #add_product(data['name'][i], data['category'][i], data['price'][i], data['supplier_id'][i], data['stock_quantity'][i])
         i += 1
 
@@ -150,9 +152,9 @@ def generate_suppliers(n):
     
     i = 0
     while i < n:
-        data['name'].append(fake.random_company_noun_chain)
-        data['contact info'].append(fake.phone_number)
-        data['country'].append(fake.country)
+        data['name'].append(fake.company())
+        data['contact info'].append(fake.phone_number())
+        data['country'].append(fake.country())
         #add_supplier(data['name'][i], data['contact info'][i], data['country'][i])
         i += 1
 
@@ -167,7 +169,7 @@ def generate_orders(n):
 
     i = 0
     while i < n:
-        data['customer_id'].append(fake.random_number(100))
+        data['customer_id'].append(random.randint(1,100))
         data['order_date'].append(fake.date_this_year)
         data['order_status'].append(random.choice(["Received", "On hold", "Collecting", "Shipped"]))
         #add_order(data['customer_id'][i], data['order_date'][i], data['order_status'][i])
@@ -185,10 +187,11 @@ def generate_order_items(n, products):
 
     i = 0
     while i < n:
-        data['order_id'].append(fake.random_number(1000))
-        data['product_id'].append(fake.random_number(100))
-        data['quantity'].append(fake.random_number(20))
-        data['price_at_purchase'].append(products["price"][ data['product_id'][i]])
+        data['order_id'].append(random.randint(1,1000))
+        data['product_id'].append(random.randint(1,100))
+        data['quantity'].append(random.randint(1,20))
+        print(data['product_id'][i])
+        data['price_at_purchase'].append(products["price"][data['product_id'][i]])
         #add_order_item(data['order_id'][i], data['product_id'][i], data['quantity'][i], data['price_at_purchase'][i])
         i = i + 1
 
@@ -209,7 +212,7 @@ def generate_customers(n):
     while i < customers_size:
        data['name'].append(fake.name())
        data['location'].append(fake.address())
-       data['email'].append(f"{data['name'][i]}@{fake.free_email_comain()}")
+       data['email'].append(f"{data['name'][i]}@{fake.free_email_domain()}")
        #add_customer(data['name'][i], data['location'][i], data['email'][i])
        i += 1
 
@@ -268,7 +271,7 @@ def main():
     suppliers = generate_suppliers(100)
     customers = generate_products(100)
     orders = generate_orders(1000)
-    order_items = generate_order_items(10000)
+    order_items = generate_order_items(10000, products)
     shipments = generate_shipments(orders)
 
 main()
