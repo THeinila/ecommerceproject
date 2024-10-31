@@ -131,7 +131,8 @@ def generate_products(n):
         data['price'].append(round(random.uniform(10, 1000), 2))
         data['supplier_id'].append(random.randint(1,100))
         data['stock_quantity'].append(random.randint(1,200))
-        #add_product((data['name'][i], data['category'][i], data['price'][i], data['supplier_id'][i], data['stock_quantity'][i]))
+        add_product((data['name'][i], data['category'][i], data['price'][i], data['supplier_id'][i], data['stock_quantity'][i]))
+        print("product ", i)
         i += 1
 
 
@@ -151,6 +152,7 @@ def generate_suppliers(n):
         data['contact info'].append(fake.phone_number())
         data['country'].append(fake.country())
         add_supplier((data['name'][i], data['contact info'][i], data['country'][i]))
+        print("supplier ", i)
         i += 1
 
     return data
@@ -169,6 +171,7 @@ def generate_orders(n):
         data['order_status'].append(random.choice(["Received", "On hold", "Collecting", "Shipped"]))
         add_order((data['customer_id'][i], data['order_date'][i], data['order_status'][i]))
         i = i+1
+        print("order", i)
         
     return data
 
@@ -188,6 +191,7 @@ def generate_order_items(n, orders, products):
         data['price_at_purchase'].append(products["price"][data['product_id'][i]])
         add_order_item((data['order_id'][i], data['product_id'][i], data['quantity'][i], data['price_at_purchase'][i]))
         i = i + 1
+        print("order items ", i)
 
     return data
 
@@ -205,11 +209,11 @@ def generate_customers(n):
        data['location'].append(fake.address())
        data['email'].append(f"{data['name'][i]}@{fake.free_email_domain()}")
        add_customer((data['name'][i], data['location'][i], data['email'][i]))
+       print("customer", i)
        i += 1
 
     return data
     
-
 def generate_shipments(orders):
    
     shipment_data = {
@@ -256,10 +260,10 @@ def connect():
     return con
 
 def main():
-    suppliers = generate_suppliers(10)
-    customers = generate_customers(10)
-    products = generate_products(10)
-    orders = generate_orders(10)
-    order_items = generate_order_items(10, orders, products)
+    suppliers = generate_suppliers(100)
+    customers = generate_customers(100)
+    products = generate_products(100)
+    orders = generate_orders(1000)
+    order_items = generate_order_items(1000, orders, products)
     #shipments = generate_shipments(orders)
 main()
