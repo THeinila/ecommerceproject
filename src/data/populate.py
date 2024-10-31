@@ -170,14 +170,14 @@ def generate_orders(n):
     i = 0
     while i < n:
         data['customer_id'].append(random.randint(1,100))
-        data['order_date'].append(fake.date_this_year)
+        data['order_date'].append(fake.date_this_year())
         data['order_status'].append(random.choice(["Received", "On hold", "Collecting", "Shipped"]))
         #add_order(data['customer_id'][i], data['order_date'][i], data['order_status'][i])
         i = i+1
         
     return data
 
-def generate_order_items(n, products):
+def generate_order_items(n, orders, products):
     data = {
         'order_id': [],
         'product_id': [],
@@ -187,20 +187,16 @@ def generate_order_items(n, products):
 
     i = 0
     while i < n:
-        data['order_id'].append(random.randint(1,1000))
-        data['product_id'].append(random.randint(1,100))
+        data['order_id'].append(random.randint(0,9))
+        data['product_id'].append(random.randint(0,9))
         data['quantity'].append(random.randint(1,20))
-        print(data['product_id'][i])
         data['price_at_purchase'].append(products["price"][data['product_id'][i]])
         #add_order_item(data['order_id'][i], data['product_id'][i], data['quantity'][i], data['price_at_purchase'][i])
         i = i + 1
 
     return data
 
-
 def generate_customers(n):
-
-    customers_size = n
 
     data = {
         'name': [],
@@ -209,7 +205,7 @@ def generate_customers(n):
     }
 
     i = 0
-    while i < customers_size:
+    while i < n:
        data['name'].append(fake.name())
        data['location'].append(fake.address())
        data['email'].append(f"{data['name'][i]}@{fake.free_email_domain()}")
@@ -221,8 +217,6 @@ def generate_customers(n):
 
 def generate_shipments(orders):
    
-    order_data = orders
-
     shipment_data = {
         'order_id': [],
         'shipped_date': [],
@@ -232,7 +226,7 @@ def generate_shipments(orders):
 
     today = datetime.datetime.now().date()
 
-    for i in range(len(orders['customer id'])+1):
+    for i in range(len(orders['customer_id'])+1):
         
         if orders['order_status'][i] == "Shipped":
             shipment_data['order_id'].append(i+1)
@@ -267,11 +261,11 @@ def connect():
     return con
 
 def main():
-    products = generate_products(100)
-    suppliers = generate_suppliers(100)
-    customers = generate_products(100)
-    orders = generate_orders(1000)
-    order_items = generate_order_items(10000, products)
-    shipments = generate_shipments(orders)
-
+    products = generate_products(10)
+    suppliers = generate_suppliers(10)
+    customers = generate_products(10)
+    orders = generate_orders(10)
+    order_items = generate_order_items(10, orders, products)
+    #shipments = generate_shipments(orders)
+    print(products, suppliers, customers, orders, order_items)
 main()
