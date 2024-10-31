@@ -25,7 +25,6 @@ def add_product(data):
             cursor.close()
             con.close()
 
-
 def add_supplier(data):
     con = connect()
     if con is not None:
@@ -166,10 +165,10 @@ def generate_orders(n):
 
     i = 0
     while i < n:
-        data['customer_id'].append(random.randint(1,10))
+        data['customer_id'].append(random.randint(1,100))
         data['order_date'].append(fake.date_this_year())
         data['order_status'].append(random.choice(["Received", "On hold", "Collecting", "Shipped"]))
-        add_order((data['customer_id'][i], data['order_date'][i], data['order_status'][i]))
+        #add_order((data['customer_id'][i], data['order_date'][i], data['order_status'][i]))
         i = i+1
         print("order", i)
         
@@ -185,8 +184,8 @@ def generate_order_items(n, orders, products):
 
     i = 0
     while i < n:
-        data['order_id'].append(random.randint(1,10))
-        data['product_id'].append(random.randint(1,10))
+        data['order_id'].append(random.randint(1,999))
+        data['product_id'].append(random.randint(1,99))
         data['quantity'].append(random.randint(1,20))
         data['price_at_purchase'].append(products["price"][data['product_id'][i]])
         add_order_item((data['order_id'][i], data['product_id'][i], data['quantity'][i], data['price_at_purchase'][i]))
@@ -225,8 +224,8 @@ def generate_shipments(orders):
 
     today = datetime.datetime.now().date()
 
-    for i in range(len(orders['customer_id'])+1):
-        
+    j = 0
+    for i in range(len(orders['customer_id'])):
         if orders['order_status'][i] == "Shipped":
             shipment_data['order_id'].append(i+1)
             shipped_date = fake.date_between_dates(date_start=orders['order_date'][i])
@@ -243,10 +242,23 @@ def generate_shipments(orders):
 
             shipment_data['shipped_date'].append(shipped_date)
             shipment_data['shipping_cost'].append(shipping_cost)
-            #add_customer(shipment_data['order_id'][i], shipment_data['shipped date'][i], shipment_data['delivery_date'][i], shipment_data['shipping_cost'][i])
-
+            add_shipments((shipment_data['order_id'][j], shipment_data['shipped_date'][j], shipment_data['delivery_date'][j], shipment_data['shipping_cost'][j]))
+            print("shipment", j)
+            j = j + 1
     return shipment_data
             
+def connect():
+    con = None
+
+    try:
+        con = psycopg2.connect(**config())
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+        if con is not None:
+            con.close()
+    
+    return con
+
 def connect():
     con = None
 
@@ -265,5 +277,7 @@ def main():
     products = generate_products(100)
     orders = generate_orders(1000)
     order_items = generate_order_items(1000, orders, products)
-    #shipments = generate_shipments(orders)
+    shipments = generate_shipments(orders)
+    pass
+
 main()
